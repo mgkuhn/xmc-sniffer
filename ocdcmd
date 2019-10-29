@@ -1,0 +1,11 @@
+#!/bin/bash
+# Usage: ocd 'command params'
+# send a command to an openocd server via its TCL RPC port
+# http://openocd.org/doc/html/Tcl-Scripting-API.html#Tcl-RPC-server
+# uses netcat-openbsd, the OpenBSD rewrite of the TCP/IP swiss army knife
+# Markus Kuhn
+host=localhost
+port=6666
+perl -l032 -E 'print for (@ARGV)' "$@" | \
+{ nc $host $port || echo "TCP connection to $host:$port failed" >&2 ; } | \
+perl -0032 -E '$_=<>;chomp;print'
